@@ -1,0 +1,9 @@
+{
+  "needs_gpu": true,
+  "artifacts": [{
+  "uri": "s3://hackathon-s3-bucket-27-e8b3s/team_027/mhs_guardrail.tar.gz",
+  "destination": "project/models",
+  "sha256": "cb1411a428760215336120d9ef48061773ac6cce45998f307fa15b0cc758fae3",
+  "required": true
+    }]
+}

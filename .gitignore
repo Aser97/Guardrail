@@ -1,0 +1,10 @@
+.venv/
+project/models/
+project/aiss.egg-info/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+results/
+project/results/
+project/models/mhs_guardrail/base_model/
