@@ -6,14 +6,16 @@
 # Supports incremental writes + resume across Paperspace Gradient sessions.
 #
 # Usage:
-#   bash project/scripts/run_1a.sh                # full run  (540 high-risk + 200 low-risk)
-#   bash project/scripts/run_1a.sh --test         # test run  (2 per signal + 3 low-risk, verbose)
-#   bash project/scripts/run_1a.sh --append       # resume    (skips already-written rows)
-#   bash project/scripts/run_1a.sh --test --append
+#   bash scripts/run_1a.sh                # full run  (540 high-risk + 200 low-risk)
+#   bash scripts/run_1a.sh --test         # test run  (2 per signal + 3 low-risk, verbose)
+#   bash scripts/run_1a.sh --append       # resume    (skips already-written rows)
+#   bash scripts/run_1a.sh --test --append
 #
 # Env vars required:
-#   BUZZ_MISTRAL_LARGE_AUTH_TOKEN  — Mistral endpoint token (from .env)
-#   BUZZ_COHERE_AUTH_TOKEN         — Cohere/Command endpoint token (from .env)
+#   MISTRAL_API_KEY    — Mistral AI private key (console.mistral.ai)
+#                        Used for all French conversations + half of English rotation.
+#   TOGETHER_API_KEY   — Together AI private key (api.together.xyz)
+#                        Used for the other half of English rotation (Llama-3.3-70B).
 # Env vars optional:
 
 
@@ -45,10 +47,14 @@ for arg in "$@"; do
 done
 
 # ── Check required env vars ───────────────────────────────────────────────────
-if [[ -z "${BUZZ_MISTRAL_LARGE_AUTH_TOKEN:-}" ]] && [[ -z "${BUZZ_COHERE_AUTH_TOKEN:-}" ]]; then
-  echo "ERROR: No hackathon API tokens found."
-  echo "       Ensure your .env file contains BUZZ_MISTRAL_LARGE_AUTH_TOKEN and BUZZ_COHERE_AUTH_TOKEN."
+if [[ -z "${MISTRAL_API_KEY:-}" ]]; then
+  echo "ERROR: MISTRAL_API_KEY not found."
+  echo "       Get a key at console.mistral.ai and add MISTRAL_API_KEY=... to your .env file."
   exit 1
+fi
+
+if [[ -z "${TOGETHER_API_KEY:-}" ]]; then
+  echo "WARNING: TOGETHER_API_KEY not set — English rotation will fall back to Mistral only."
 fi
 
 

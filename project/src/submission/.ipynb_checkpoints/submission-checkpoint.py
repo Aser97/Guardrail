@@ -110,7 +110,7 @@ class MHSGuardrail:
 
         LOGGER.info("Loading Qwen2.5-7B-Instruct base model (dtype=%s)…", dtype)
         base = AutoModelForCausalLM.from_pretrained(
-            model_path / "base_model",
+            _BASE_MODEL,
             torch_dtype=dtype,
             device_map=device,
         )

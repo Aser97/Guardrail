@@ -53,7 +53,7 @@ from config import (
 )
 from itertools import cycle
 from typing import Callable
-from llm_client import LLMClient, MISTRAL, GPT_OSS
+from llm_client import PrivateClient, PRIVATE_MISTRAL, PRIVATE_SUPPORT
 from utils import (
     persona_to_text, stressor_to_text,
     init_csv, append_row, count_csv_rows_by_field, vprint,
@@ -70,9 +70,9 @@ LOGGER = logging.getLogger(__name__)
 # Model rotation
 # ──────────────────────────────────────────────────────────────────────────────
 
-# Two hackathon models rotate for English/mixed conversations.
+# Private models rotate for English/mixed conversations.
 # French is always routed to Mistral (strongest French capability).
-_ROTATION_MODELS = [MISTRAL, GPT_OSS]  # COMMAND excluded (504 timeouts)
+_ROTATION_MODELS = [PRIVATE_MISTRAL, PRIVATE_SUPPORT]
 
 
 def _make_rotator() -> Callable[[str], str]:
@@ -81,7 +81,7 @@ def _make_rotator() -> Callable[[str], str]:
 
     def pick(language: str) -> str:
         if language == "fr":
-            return MISTRAL
+            return PRIVATE_MISTRAL
         return next(_cycle)
 
     return pick
@@ -650,11 +650,11 @@ def main() -> int:
     else:
         LOGGER.warning("Slang bank not found at %s — proceeding without slang.", SLANG_BANK_PATH)
 
-    client     = LLMClient()
+    client     = PrivateClient()
     pick_model = _make_rotator()
     LOGGER.info(
-        "Model rotation: French → Mistral always; English/mixed → round-robin %s",
-        [MISTRAL, GPT_OSS],
+        "Model rotation: French → %s always; English/mixed → round-robin %s",
+        PRIVATE_MISTRAL, [PRIVATE_MISTRAL, PRIVATE_SUPPORT],
     )
 
     # Open output file once — rows are written incrementally inside generation functions

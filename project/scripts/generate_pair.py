@@ -238,7 +238,7 @@ def _judge_accepts(result: dict, mode: str) -> bool:
 # ──────────────────────────────────────────────────────────────────────────────
 
 def _call_generator(
-    client: LLMClient,
+    client: PrivateClient,
     entry: dict,
     mode: str,
     language: str,
