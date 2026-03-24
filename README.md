@@ -1,10 +1,45 @@
-# Quickstart Guide
+# Mental Health Safety Guardrail
 
-This guide walks you through every step — from opening your compute environment to synthetizing, training and evaluating your Guard Rail model. Each step builds on the previous one.
+A fine-tuned input guardrail for triaging youth mental health conversations, built during
+the Mental Health Safety Sandbox Hackathon (2026) in partnership with Kids Help Phone.
+
+The system detects 9 clinically-grounded distress signals in free-text conversations and
+produces a calibrated high-risk probability used to route users to human counsellors before
+the virtual assistant responds. It is designed for the realities of youth language: indirect
+phrasing, slang, code-switching, and multi-turn de-escalation patterns that surface-level
+keyword filters routinely miss.
+
+## Architecture
+
+<p align="center">
+  <img src="architecture.png" alt="Two-phase scoring pipeline" width="750"/>
+</p>
+
+The pipeline runs in two phases. A **Qwen2.5-7B-Instruct + LoRA** encoder scores each
+conversation across 9 signal heads simultaneously (multi-label, up to 4 096 tokens,
+natively bilingual EN/FR). A lightweight **logistic regression calibration head** then
+aggregates the 9 probabilities into a single `P(high_risk)` score, learning co-occurrence
+patterns that single-signal thresholds cannot capture. At inference the score is compared
+against a deployment threshold calibrated for recall ≥ 95% (Youden's J: 0.707, deployed: 0.6).
+
+| Metric | Value |
+|---|---|
+| F1 | 0.85 |
+| Recall | 0.88 |
+| Precision | 0.82 |
+| Latency | ~157 ms / conversation |
+| False negatives (missed crises) | 5 / 42 high-risk cases |
+
+The model was stress-tested against 155 adversarial cases across 5 attack methods
+(persona journey, ambiguity, multi-turn drift, etc.) — results and failure analysis
+are documented in [`report.pdf`](report.pdf).
+
 
 ---
 
 <br>
+
+This guide walks you through every step — from opening your compute environment to synthetizing, training and evaluating your Guard Rail model. Each step builds on the previous one.
 
 ## Setup the Environment
 
