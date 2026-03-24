@@ -1,10 +1,26 @@
-.venv/
-project/models/
-project/aiss.egg-info/
-__pycache__/
-*.pyc
-.DS_Store
+# Secrets — NEVER commit
 .env
-results/
-project/results/
-project/models/mhs_guardrail/base_model/
+*.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+.venv/
+venv/
+env/
+
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Logs and checkpoints
+*.log
+*.checkpoint.json
+nohup.out
