@@ -3,6 +3,35 @@
 A fine-tuned input guardrail for triaging youth mental health conversations, built during
 the Mental Health Safety Sandbox Hackathon (2026) in partnership with Kids Help Phone.
 
+---
+
+## 📖 Blog Post & Dataset
+
+A full write-up of the dataset construction pipeline — generation techniques, signal taxonomy, augmentation strategies, and evaluation results — is available on my website:
+
+**[🛡️ Building a Custom Dataset for a Youth Mental Health Safety Guardrail](https://aser97.github.io/Blog/guardrail-dataset/)**
+
+The dataset itself is publicly available on HuggingFace:
+
+[![HuggingFace Dataset](https://img.shields.io/badge/🤗%20Dataset-khp--youth--mental--health--guardrail-FFD21E?style=flat-square)](https://huggingface.co/datasets/AserLompo/khp-youth-mental-health-guardrail)
+
+```python
+from datasets import load_dataset
+
+ds = load_dataset("AserLompo/khp-youth-mental-health-guardrail")
+print(ds)
+```
+
+| Split | Rows | High-risk | Low-risk |
+|-------|------|-----------|----------|
+| Train | ~1520 | ~760 | ~760 |
+| Validation | ~190 | ~95 | ~95 |
+| Test | ~190 | ~95 | ~95 |
+
+The dataset covers **9 distress signal categories** (burden language, finality language, escape framing, hopelessness, active self-harm, immediate safety, self-image crisis, third-party concern, testing), is bilingual EN/FR, and targets a youth register (ages 13–17).
+
+---
+
 The system detects 9 clinically-grounded distress signals in free-text conversations and
 produces a calibrated high-risk probability used to route users to human counsellors before
 the virtual assistant responds. It is designed for the realities of youth language: indirect
